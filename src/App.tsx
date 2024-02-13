@@ -6,6 +6,7 @@ import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_roots/RootLayout";
 import { Home } from "./_roots/pages";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const App = () => {
   return (
@@ -22,6 +23,8 @@ const App = () => {
           <Route index element={<Home />} />
         </Route>
       </Routes>
+
+      <Toaster />
     </main>
   );
 };
