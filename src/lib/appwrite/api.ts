@@ -53,3 +53,8 @@ export async function saveUserToDB(user: {
     console.log(error);
   }
 }
+
+export async function signInAccount(user: {
+  email: string;
+  password: string;
+}) {}
