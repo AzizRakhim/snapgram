@@ -52,7 +52,9 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
           </h3>
           <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG</p>
 
-          <Button className="shad-button_dark_4">Select from computer</Button>
+          <Button type="button" className="shad-button_dark_4">
+            Select from computer
+          </Button>
         </div>
       )}
     </div>
