@@ -90,6 +90,9 @@ export const useLikePost = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
+      });
     },
   });
 };
@@ -100,7 +103,10 @@ export const useSavePost = () => {
   return useMutation({
     mutationFn: ({ postId, userId }: { postId: string; userId: string }) =>
       savePost(postId, userId),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
+      });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
       });
@@ -109,6 +115,9 @@ export const useSavePost = () => {
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
       });
     },
   });

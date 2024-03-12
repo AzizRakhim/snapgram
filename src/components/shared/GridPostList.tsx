@@ -17,7 +17,7 @@ const GridPostList = ({
   const { user } = useUserContext();
 
   return (
-    <ul className="grid-container">
+    <>
       {posts.map((post) => (
         <li key={post.$id} className="relative min-w-80 h-80">
           <Link to={`/posts/${post.$id}`} className="grid-post_link">
@@ -43,7 +43,7 @@ const GridPostList = ({
           </div>
         </li>
       ))}
-    </ul>
+    </>
   );
 };
 
