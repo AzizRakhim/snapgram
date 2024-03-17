@@ -9,6 +9,7 @@ import {
   useGetUserPosts,
 } from "@/lib/react-query/queriesAndMutations";
 import { multiFormatDateString } from "@/lib/utils";
+import { useMemo } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 const PostDetails = () => {
@@ -33,6 +34,10 @@ const PostDetails = () => {
       navigate("/");
     }
   };
+
+  const tags = useMemo(() => {
+    return post?.tags.filter(Boolean);
+  }, [post?.tags]);
 
   return (
     <div className="post_details-container">
@@ -89,7 +94,7 @@ const PostDetails = () => {
                 </div>
               </Link>
 
-              <div className="flex-center">
+              <div className="flex-center gap-2">
                 <Link
                   to={`/update-post/${post?.$id}`}
                   className={`${user.id !== post?.creator.$id && "hidden"}`}
@@ -105,7 +110,7 @@ const PostDetails = () => {
                 <Button
                   onClick={handleDeletePost}
                   variant={"ghost"}
-                  className={`ghost_details-delete_btn ${
+                  className={`post_details-delete_btn ${
                     user.id !== post?.creator.$id && "hidden"
                   }`}
                 >
@@ -129,8 +134,8 @@ const PostDetails = () => {
 
             <div className="flex flex-col flex-1 w-full small-medium lg:base-regular">
               <p>{post?.caption}</p>
-              <ul className="flex gap-1 mt-2">
-                {post?.tags.map((tag: string) => (
+              <ul className="flex flex-wrap gap-1 mt-2">
+                {tags.map((tag: string) => (
                   <li key={tag} className="text-light-3">
                     #{tag}
                   </li>
@@ -153,10 +158,12 @@ const PostDetails = () => {
         </h3>
         {isUserPostLoading || !relatedPosts ? (
           <Loader />
-        ) : (
+        ) : relatedPosts.length ? (
           <ul className="grid-container">
             <GridPostList posts={relatedPosts} />
           </ul>
+        ) : (
+          "No Related Posts"
         )}
       </div>
     </div>

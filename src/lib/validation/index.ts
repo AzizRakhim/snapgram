@@ -18,7 +18,13 @@ export const SigninValidation = z.object({
 
 export const PostValidation = z.object({
   caption: z.string().min(2).max(2200),
-  file: z.custom<File[]>(),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  file: z.custom<File[]>((value: any) => {
+    if (value?.length === 0) {
+      return false;
+    }
+    return value;
+  }),
   location: z.string().min(2).max(100),
   tags: z.string(),
 });

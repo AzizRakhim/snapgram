@@ -3,6 +3,7 @@ import { multiFormatDateString } from "@/lib/utils";
 import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 import PostStats from "./PostStats";
+import { useMemo } from "react";
 
 type PostCardProps = {
   post: Models.Document;
@@ -10,6 +11,10 @@ type PostCardProps = {
 
 const PostCard = ({ post }: PostCardProps) => {
   const { user } = useUserContext();
+
+  const tags = useMemo(() => {
+    return post.tags.filter(Boolean);
+  }, [post.tags]);
 
   if (!post.creator) return;
 
@@ -61,7 +66,7 @@ const PostCard = ({ post }: PostCardProps) => {
         <div className="small-medium lg:base-medium py-5">
           <p>{post.caption}</p>
           <ul className="flex flex-wrap gap-1 mt-2">
-            {post.tags.map((tag: string, index: number) => (
+            {tags.map((tag: string, index: number) => (
               <li key={`${tag}${index}`} className="text-light-3 small-regular">
                 #{tag}
               </li>
