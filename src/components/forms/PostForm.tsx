@@ -41,7 +41,23 @@ const PostForm = ({ post, action }: PostFormProps) => {
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof PostValidation>>({
-    resolver: zodResolver(PostValidation),
+    resolver: zodResolver(
+      z.object({
+        caption: z.string().min(2).max(2200),
+        file:
+          action === "Update"
+            ? z.custom<File[]>()
+            : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              z.custom<File[]>((value: any) => {
+                if (value?.length === 0) {
+                  return false;
+                }
+                return value;
+              }),
+        location: z.string().min(2).max(100),
+        tags: z.string(),
+      })
+    ),
     defaultValues: {
       caption: post ? post?.caption : "",
       file: [],
