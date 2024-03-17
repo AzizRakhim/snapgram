@@ -3,11 +3,16 @@ import { Button } from "../ui/button";
 import { useSignOutAccount } from "@/lib/react-query/queriesAndMutations";
 import { useEffect } from "react";
 import { useUserContext } from "@/context/AuthContext";
+import Loader from "./Loader";
 
 const Topbar = () => {
-  const { mutate: signOut, isSuccess } = useSignOutAccount();
+  const {
+    mutate: signOut,
+    isSuccess,
+    isPending: isSigningOut,
+  } = useSignOutAccount();
   const navigate = useNavigate();
-  const { user } = useUserContext();
+  const { user, isLoading } = useUserContext();
 
   useEffect(() => {
     if (isSuccess) navigate(0);
@@ -26,16 +31,32 @@ const Topbar = () => {
         </Link>
 
         <div className="flex gap-4">
-          <Button className="shad-button_ghost" onClick={() => signOut()}>
-            <img src="/assets/icons/logout.svg" alt="logout" />
+          <Button
+            className="shad-button_ghost"
+            onClick={() => signOut()}
+            disabled={isSigningOut}
+          >
+            {isSigningOut ? (
+              <span>
+                <Loader />
+              </span>
+            ) : (
+              <img src="/assets/icons/logout.svg" alt="logout" />
+            )}
           </Button>
-          <Link to={`/profile/${user.id}`} className="flex-center gap-3">
-            <img
-              src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
-              alt="profile"
-              className="h-8 w-8 rounded-full"
-            />
-          </Link>
+          {isLoading ? (
+            <span className="flex-center">
+              <Loader />
+            </span>
+          ) : (
+            <Link to={`/profile/${user.id}`} className="flex-center gap-3">
+              <img
+                src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
+                alt="profile"
+                className="h-8 w-8 rounded-full"
+              />
+            </Link>
+          )}
         </div>
       </div>
     </section>

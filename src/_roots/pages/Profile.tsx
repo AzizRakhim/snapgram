@@ -137,9 +137,15 @@ const Profile = () => {
         <Route
           index
           element={
-            <ul className="grid-container">
-              <GridPostList posts={currentUser.posts} showUser={false} />
-            </ul>
+            <>
+              {currentUser.posts.length ? (
+                <ul className="grid-container">
+                  <GridPostList posts={currentUser.posts} showUser={false} />
+                </ul>
+              ) : (
+                "This user has no posts"
+              )}
+            </>
           }
         />
         {currentUser.$id === user.id && (
