@@ -111,7 +111,7 @@ const PostDetails = () => {
                   onClick={handleDeletePost}
                   variant={"ghost"}
                   className={`post_details-delete_btn ${
-                    user.id !== post?.creator.$id && "hidden"
+                    user.id !== post?.creator.$id && "!hidden"
                   }`}
                 >
                   {isDeletingPost ? (
