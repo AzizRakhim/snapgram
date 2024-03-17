@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 
 import { convertFileToUrl } from "@/lib/utils";
+import { useToast } from "../ui/use-toast";
 
 type ProfileUploaderProps = {
   fieldChange: (files: File[]) => void;
@@ -9,11 +10,24 @@ type ProfileUploaderProps = {
 };
 
 const ProfileUploader = ({ fieldChange, mediaUrl }: ProfileUploaderProps) => {
+  const { toast } = useToast();
   const [file, setFile] = useState<File[]>([]);
   const [fileUrl, setFileUrl] = useState<string>(mediaUrl);
 
   const onDrop = useCallback(
     (acceptedFiles: FileWithPath[]) => {
+      const invalidFiles = acceptedFiles.filter(
+        (file) =>
+          ![".png", ".jpeg", ".jpg"].includes(`.${file.name.split(".").pop()}`)
+      );
+
+      if (invalidFiles.length > 0) {
+        toast({
+          title: "Only PNG, JPEG, and JPG files are allowed.",
+        });
+        return;
+      }
+
       setFile(acceptedFiles);
       fieldChange(acceptedFiles);
       setFileUrl(convertFileToUrl(acceptedFiles[0]));

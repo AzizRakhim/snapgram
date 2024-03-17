@@ -24,12 +24,14 @@ import {
   useGetUserById,
   useUpdateUser,
 } from "@/lib/react-query/queriesAndMutations";
+import { useEffect } from "react";
 
 const UpdateProfile = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
   const { user, setUser } = useUserContext();
+
   const form = useForm<z.infer<typeof ProfileValidation>>({
     resolver: zodResolver(ProfileValidation),
     defaultValues: {
@@ -40,6 +42,16 @@ const UpdateProfile = () => {
       bio: user.bio || "",
     },
   });
+
+  useEffect(() => {
+    form.reset({
+      file: [],
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      bio: user.bio || "",
+    });
+  }, [form, user.bio, user.email, user.name, user.username]);
 
   // Queries
   const { data: currentUser } = useGetUserById(id || "");
@@ -187,7 +199,9 @@ const UpdateProfile = () => {
               <Button
                 type="button"
                 className="shad-button_dark_4"
-                onClick={() => navigate(-1)}
+                onClick={() => {
+                  navigate("/");
+                }}
               >
                 Cancel
               </Button>
